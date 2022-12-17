@@ -1,0 +1,4 @@
+#Description of Tutoring application for Pim Meekel
+
+# Use host user (which is 1000 in my case)
+docker run -it --user 1000:1000 -v $(pwd):/home/appuser/app tutoring:dev bash

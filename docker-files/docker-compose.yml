@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:13
+    container_name: tutoring-db
+    ports:
+      - "15555:5432"
+    env_file: environment/db.env
+    volumes:
+      - tutoring_data_volume:/var/lib/postgresql/data/
+  web:
+    image: tutoring:dev
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: tutoring-backend
+    env_file:
+      - environment/backend.env
+    command: >
+      bash -c "python manage.py migrate; \
+               python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ../:/home/appuser/app
+    ports:
+      - "17500:8000"
+    depends_on:
+      - db
+
+volumes:
+  tutoring_data_volume:
